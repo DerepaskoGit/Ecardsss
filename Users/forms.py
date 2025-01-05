@@ -1,5 +1,25 @@
 from django import forms
 
+class LoginForm(forms.Form):
+    username = forms.CharField(
+        max_length=25,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': "Введите email",
+            'id': 'email',
+            'name': 'email'
+    }))
+
+    password = forms.CharField(
+        max_length=25, 
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'placeholder': "Введите пароль",
+            'id': 'pwd',
+            'name': 'password'
+        }))
+        
+
 class RegisterForm(forms.Form):  
     email = forms.EmailField(
         max_length=25,
