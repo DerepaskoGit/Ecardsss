@@ -37,6 +37,8 @@ def loginView(request):
             if user and user.is_active:
                 login(request, user)
                 return redirect('users_library')
+            else:
+                form.add_error(None, 'Логин или пароль не совпадают')
     else:
         form = LoginForm()
 
