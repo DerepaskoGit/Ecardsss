@@ -2,11 +2,11 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from django.contrib.auth import authenticate, login, logout
 from .models import InviteCodeDb
-from .forms import RegisterForm, LoginForm
+from .forms import RegisterForm, LoginForm, UserLibraryForm
 from .utils import generate_inviteCode
 
 def index(request):
-    return redirect('login')
+    return redirect('users_library')
 
 def signupView(request):
     if request.method == 'POST':
@@ -57,8 +57,9 @@ def generate_inviteCode_view(request):
 
 
 def users_library(request):
+    form = UserLibraryForm()
     Data = {
-        
+        'form':form
     }
 
     return render(request, 'Users/users_library.html', Data)

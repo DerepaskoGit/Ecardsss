@@ -3,6 +3,9 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import get_user_model, authenticate
 from .models import InviteCodeDb
 
+class UserLibraryForm(forms.Form):
+    name = forms.CharField(widget=forms.TextInput(attrs={'maxlength':'4', 'name': 'emaiwwwl'}))
+
 class LoginForm(forms.Form):
     username = forms.CharField(
         max_length=25,
@@ -10,7 +13,7 @@ class LoginForm(forms.Form):
             'class': 'form-control',
             'placeholder': "Введите логин или email",
             'id': 'email',
-            'name': 'email'
+            'name': 'email',
     }))
 
     password = forms.CharField(
@@ -33,21 +36,23 @@ class LoginForm(forms.Form):
 
 class RegisterForm(forms.ModelForm):  
     repeat_password = forms.CharField(
-        max_length=25,
+        max_length=8,
         widget=forms.PasswordInput(attrs={
         'class': 'form-control',
         'placeholder': "Повторите пароль",
         'id': 'repassword',
-        'name': 'repeat_password'
+        'name': 'repeat_password',
+        
     }))
 
     invite_code = forms.CharField( 
-        max_length=25,
+        max_length=8,
         widget=forms.TextInput(attrs={
             'class': 'form-control',
             'placeholder': "Введите invite code",
             'id': 'invite_code',
-            'name': 'invite_code'
+            'name': 'invite_code',
+            
     }))
     
 
@@ -60,16 +65,19 @@ class RegisterForm(forms.ModelForm):
                 'class': 'form-control',
                 'placeholder': "Введите email",
                 'id': 'email',
+                'maxlength':'8', 
             }),
             'username': forms.TextInput(attrs={
                 'class': 'form-control',
                 'placeholder': "Введите имя пользователя",
                 'id': 'username',
+                'maxlength':'8', 
             }),
             'password': forms.PasswordInput(attrs={
                 'class': 'form-control',
                 'placeholder': "Введите пароль",
                 'id': 'password',
+                'maxlength':'8', 
             })
         }
 
