@@ -35,57 +35,59 @@ class LoginForm(forms.Form):
 
 
 class RegisterForm(forms.ModelForm):  
+    email = forms.EmailField( 
+        min_length=6,
+        max_length=40,
+        widget=forms.EmailInput(attrs={
+            'class': 'form-control',
+            'placeholder': "Введите email",
+            'id': 'email',
+    }))
+
+    username = forms.CharField( 
+        min_length=4,
+        max_length=10,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': "Введите имя пользователя",
+            'id': 'username',
+            'maxlength':'8',
+    }))
+
+    password = forms.CharField(
+        min_length=4,
+        max_length=8,
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'placeholder': "Введите пароль",
+            'id': 'password',
+            'maxlength':'8', 
+    }))
+
     repeat_password = forms.CharField(
+        min_length=4,
         max_length=8,
         widget=forms.PasswordInput(attrs={
         'class': 'form-control',
         'placeholder': "Повторите пароль",
         'id': 'repassword',
         'name': 'repeat_password',
-        
     }))
 
     invite_code = forms.CharField( 
-        max_length=8,
+        max_length=15,
         widget=forms.TextInput(attrs={
             'class': 'form-control',
             'placeholder': "Введите invite code",
             'id': 'invite_code',
             'name': 'invite_code',
-            
     }))
-    
+
 
     class Meta:
         model = get_user_model()
         fields = ['email', 'username', 'password']
-        
-        widgets = {
-            'email': forms.EmailInput(attrs={
-                'class': 'form-control',
-                'placeholder': "Введите email",
-                'id': 'email',
-                'maxlength':'8', 
-            }),
-            'username': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': "Введите имя пользователя",
-                'id': 'username',
-                'maxlength':'8', 
-            }),
-            'password': forms.PasswordInput(attrs={
-                'class': 'form-control',
-                'placeholder': "Введите пароль",
-                'id': 'password',
-                'maxlength':'8', 
-            })
-        }
 
-    def clean_invite_code(self):
-        invite_code = self.cleaned_data['invite_code']
-        if InviteCodeDb.objects.filter(invite_code=invite_code).exists():
-           return invite_code
-        raise forms.ValidationError('Неверный invite code')
 
     def clean_email(self):
         email = self.cleaned_data.get('email')
@@ -107,5 +109,11 @@ class RegisterForm(forms.ModelForm):
         if password and repeat_password and password != repeat_password:
             self.add_error('repeat_password', 'Пароли не совпадают')
         return cd
+    
+    def clean_invite_code(self):
+        invite_code = self.cleaned_data['invite_code']
+        if InviteCodeDb.objects.filter(invite_code=invite_code).exists():
+           return invite_code
+        raise forms.ValidationError('Неверный invite code')
     
     

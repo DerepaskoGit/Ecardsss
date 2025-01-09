@@ -3,7 +3,7 @@ import string
 from .models import InviteCodeDb
 
 def generate_inviteCode(user):
-    code = ''.join(sample((string.ascii_letters + string.digits), 10))
+    code = ''.join(sample((string.ascii_lowercase + string.digits), 4))
     
     invite, created = InviteCodeDb.objects.get_or_create(
         user=user,
