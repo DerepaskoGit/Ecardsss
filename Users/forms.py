@@ -45,7 +45,7 @@ class RegisterForm(forms.ModelForm):
     }))
 
     username = forms.CharField( 
-        min_length=4,
+        min_length=3,
         max_length=10,
         widget=forms.TextInput(attrs={
             'class': 'form-control',
@@ -90,25 +90,34 @@ class RegisterForm(forms.ModelForm):
 
 
     def clean_email(self):
-        email = self.cleaned_data.get('email')
+        email = self.cleaned_data['email']
         if get_user_model().objects.filter(email=email).exists():
             raise forms.ValidationError('Такой E-mail уже существует')
         return email
     
     def clean_username(self):
-        username = self.cleaned_data.get('username')
+        username = self.cleaned_data['username']
         if get_user_model().objects.filter(username=username).exists():
             raise forms.ValidationError('Логин занят')
+        if username.isdigit():
+            raise forms.ValidationError('Логин не может состоять только из цифр')
         return username
 
-    def clean(self):
+    def clean_repeat_password(self): 
         cd = self.cleaned_data
-        password = cd.get('password')
-        repeat_password = cd.get('repeat_password')
 
-        if password and repeat_password and password != repeat_password:
-            self.add_error('repeat_password', 'Пароли не совпадают')
+        if cd['password'] != cd['repeat_password']:
+            raise forms.ValidationError('Пароли не совпадают')
+        
         return cd
+    
+    def clean_password(self):
+        password = self.cleaned_data['password']
+        if password.isdigit():
+            self.add_error('password', 'Пароль не может состоять только из цифр')
+        if password.isalpha():
+            self.add_error('password', 'Пароль не может состоять только из букв')
+        return password
     
     def clean_invite_code(self):
         invite_code = self.cleaned_data['invite_code']

@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
 from .models import InviteCodeDb
 from .forms import RegisterForm, LoginForm, UserLibraryForm
 from .utils import generate_inviteCode
@@ -8,7 +9,7 @@ from .utils import generate_inviteCode
 def index(request):
     return redirect('users_library')
 
-def signupView(request):
+def signup_view(request):
     if request.method == 'POST':
         form = RegisterForm(request.POST)
         if form.is_valid():
@@ -19,7 +20,6 @@ def signupView(request):
             return render(request, 'Users/register_done.html')
     else:
         form = RegisterForm()
-        
     
     Data = {
         'form': form
@@ -28,7 +28,7 @@ def signupView(request):
     return render(request, 'Users/signup.html', Data)
 
 
-def loginView(request):
+def login_view(request):
     if request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():

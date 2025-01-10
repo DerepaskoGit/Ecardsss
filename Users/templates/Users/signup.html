@@ -37,17 +37,23 @@
       <button type="submit" class="btn btn-primary Submit">Регистрация</button>
       <a href="{% url 'login' %}" class="btn btn-primary Login">Вход</a>
 
-      {% if form.repeat_password.errors %}
-      <div style="margin-top: 10px;" class="error">{{ form.repeat_password.errors.0 }}</div>
-      {% endif %}
-      {% if form.invite_code.errors %}
-      <div class="error">{{ form.invite_code.errors.0 }}</div>
-      {% endif %}
       {% if form.email.errors %}
       <div class="error">{{ form.email.errors.0 }}</div>
       {% endif %}
       {% if form.username.errors %}
       <div class="error">{{ form.username.errors.0 }}</div>
+      {% endif %}
+      {% if form.password.errors %}
+      <div style="margin-top: 10px;" class="error">{{ form.password.errors.0 }}</div>
+      {% endif %}
+      {% if form.password.errors %}
+      <div style="margin-top: 10px;" class="error">{{ form.password.errors.1 }}</div>
+      {% endif %}
+      {% if form.repeat_password.errors %}
+      <div style="margin-top: 10px;" class="error">{{ form.repeat_password.errors.0 }}</div>
+      {% endif %}
+      {% if form.invite_code.errors %}
+      <div class="error">{{ form.invite_code.errors.0 }}</div>
       {% endif %}
 
     </form> 
