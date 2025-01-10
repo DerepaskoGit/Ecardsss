@@ -1,0 +1,6 @@
+.buttons_left {
+    position: fixed;
+    top: 300px;
+    left: 20px;
+    z-index: 1050;
+}
