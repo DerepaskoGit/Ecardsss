@@ -57,7 +57,7 @@ def generate_inviteCode_view(request):
 
 
 def users_library(request):
-    form = UserLibraryForm()
+    form = LoginForm()
     Data = {
         'form':form
     }
