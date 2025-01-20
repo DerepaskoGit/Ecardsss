@@ -1,0 +1,128 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>{{ title }}</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'Users/css/library.css' %}">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+
+<div class="header" id="header">
+  <div class="one-container">
+    <div class="header-line">
+
+      <div class="skope-menu">
+        <div class="burger-and-logo">
+
+          <button type="button" class="burger-menu-btn" id="burger-menu">
+            <img src="{% static 'Users/images/menu-burger.png' %}" alt="Бургер меню" class="burger-menu-img">
+          </button>
+         
+          <div class="logo">
+            <a href="#"><img class="logo-img" src="{% static 'Users/images/logo.png' %}" alt=""></a>
+          </div>
+
+        </div>
+
+        <div class="icons-src">
+
+          <div class="home-icon-bl">
+            <a href="{% url 'users_library' %}"><img src="{% static 'Users/images/home.png' %}" alt="Главная" class="home-icon"></a>
+          </div>
+          <div class="library-icon-bl">
+            <a href="#"><img src="{% static 'Users/images/library.png' %}" alt="Библиотека" class="library-icon"></a>
+          </div>
+          <div class="cards-icon-bl">
+            <a href="#"><img src="{% static 'Users/images/cards.png' %}" alt="Карточки" class="cards-icon"></a>
+          </div>
+          
+        </div>
+
+        <div class="icons-src-open">
+
+          <div class="home-icon-bl-open">
+            <a href="{% url 'users_library' %}"><img src="{% static 'Users/images/home.png' %}" alt="Главная" class="home-icon-open"> Главная</a>
+          </div>
+          <div class="library-icon-bl">
+            <a href="#"><img src="{% static 'Users/images/library.png' %}" alt="Библиотека" class="library-icon-open library-icon-open-text"> Ваша библиотека</a>
+          </div>
+          <div class="cards-icon-bl">
+            <a href="#"><img src="{% static 'Users/images/cards.png' %}" alt="Карточки" class="cards-icon-open"> Мои карточки</a>
+          </div>
+          
+        </div>
+      </div>
+
+      <div class="search-bl">
+        <div>
+          <input class="form-control search-input" type="search" placeholder="Search..." aria-label="Search">
+        </div>
+        <div>
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </div>
+      </div>
+      
+      <div class="account-bl">
+
+        <div class="user-dropdown">
+
+          {% if user_isAuthenticated %}
+          <button type="button" id="user-btn" class="user-btn" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+            <img src="{% static 'Users/images/User-icon2.png' %}" alt="user_icon" class="user-icon">
+          </button>
+          
+          {% else %}
+          <a href="{% url 'login' %}" class="btn login-url">Войти</a>
+          {% endif %}
+
+          <div class="user-profile-menu">
+            <ul class="dropdown-menu dr-menu">
+
+              <div class="d-flex ml-auto dr-menu-bl-1">
+                <div>
+                  <img src="{% static 'Users/images/User_icon.png' %}" alt="user_icon" class="user-icon-open">
+                </div>
+                <div class="username-mail-dr-open">
+                  <div class="username-dr-open">Shecn</div>
+                  <div>shecn@gmail.com</div>
+                </div>
+              </div>
+
+              <div class="separator"></div>
+
+              <div class="dr-menu-open-btns">
+                <form method="POST">
+                  {% csrf_token %}
+                  <button type="submit" name="logout" class="btn login-dr-menu-open">Выйти</button>
+                </form>
+                <li><button id="generateInviteBtn" class="btn invite-dr-menu-open" type="button">Пригласить</button></li>
+                <p id="inviteCodeDisplay">{% if invite_code %}Ваш инвайт-код: {{ invite_code }}{% endif %}</p>
+              </div>  
+            </ul>    
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+{% block content %}{% endblock %}
+<div id="url-container" data-url="{% url 'generate_invite' %}"></div>
+<div id="csrf-container" data-csrf="{{ csrf_token }}"></div>
+<script>
+  const userAuthenticated = '{{ user }}';
+</script>
+<script src="{% static 'Users/js/script.js' %}"></script>
+</body>
+</html>

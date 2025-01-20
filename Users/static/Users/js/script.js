@@ -1,3 +1,40 @@
+document.addEventListener('DOMContentLoaded', function() {
+  const burgerMenu = document.getElementById('burger-menu');
+  const header = document.querySelector('.header');
+  const burgerMenuBtn = document.querySelector('.burger-menu-btn');
+  const iconsSrcElement = document.querySelector('.icons-src');
+
+  burgerMenu.addEventListener('click', function (event) {
+    // Останавливаем всплытие события, чтобы клик внутри меню не закрывал его
+    event.stopPropagation();
+
+    header.classList.toggle('open')
+    burgerMenuBtn.classList.toggle('burger-menu-btn-open')
+
+    
+    if (iconsSrcElement.style.display == 'none') {
+      iconsSrcElement.style.display = 'flex';
+    } else {
+        iconsSrcElement.style.display = 'none';
+    } 
+  });
+
+  // Закрытие меню при клике вне его области
+  document.addEventListener('click', function (event) {
+    // Проверяем, открыто ли меню
+    if (header.classList.contains('open')) {
+      iconsSrcElement.style.display = 'none';
+      // Проверяем, кликнули ли вне меню
+      if (!header.contains(event.target) && !burgerMenu.contains(event.target)) {
+        header.classList.remove('open');
+        burgerMenuBtn.classList.remove('burger-menu-btn-open');
+        iconsSrcElement.style.display = 'flex';
+      }
+    }
+  });
+});
+
+
 document.getElementById('generateInviteBtn').onclick = function() {
     const UrlContainer = document.getElementById("url-container")
     const MyUrl = UrlContainer.dataset.url;
@@ -21,3 +58,4 @@ document.getElementById('generateInviteBtn').onclick = function() {
       }
     });
   };
+

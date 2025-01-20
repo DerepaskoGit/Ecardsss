@@ -1,0 +1,317 @@
+body {
+    margin: 0;
+    font-family: "Open Sans", serif;
+}
+
+.one-container {
+    margin: 10px 20px;
+}
+
+.header-line {
+    display: flex;
+    align-items: center;
+}
+
+.burger-and-logo {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    z-index: 10;
+}
+
+.burger-menu-btn {
+    background-color: white;
+    border: 0;
+    border-radius: 50%;
+    width: 41px;
+    height: 41px;
+
+    z-index: 10;
+    transition: background-color 0.1s linear;
+}
+
+.burger-menu-btn:hover {
+    background-color: #f9f9f9;
+    /*alternative #353e5a14 */
+}
+
+.burger-menu-btn-open {
+    background-color: #f9f9f9;
+}
+
+.logo-img {
+    width: 45px;
+    height: 45px;
+    z-index: 10;
+  
+    position: relative;
+}
+
+.icons-src {
+    position: absolute;
+    top: 90px;
+    left: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    z-index: 5;
+}
+
+.home-icon-bl:hover {
+    background-color: #ececec;
+    outline: 8px solid #ececec;
+    border-radius: 3px;
+}
+
+.library-icon-bl:hover {
+    background-color: #ececec;
+    outline: 8px solid #ececec;
+    border-radius: 3px;
+}
+
+.cards-icon-bl:hover {
+    background-color: #ececec;
+    outline: 8px solid #ececec;
+    border-radius: 3px;
+}
+
+.home-icon {
+    width: 23px;
+    height: 23px;
+}
+
+.library-icon {
+    width: 23px;
+    height: 23px;
+}
+
+.cards-icon {
+    width: 23px;
+    height: 23px;
+}
+
+.icons-src-open {
+    position: absolute;
+    top: 90px;
+    left: -210px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    z-index: 2;
+    background-color: transparent;
+}
+
+.icons-src-open a {
+    color: black;
+    text-decoration: none;
+
+}
+
+.icons-src-open::before {
+    content: '';
+    position: absolute;
+    top: -100px;
+    left: -30px;
+    right: -35px;
+    bottom: -739px;
+    background-color: #f9f9f9; 
+    z-index: -10; 
+}
+
+.home-icon-bl-open:hover {
+    background-color: #ececec;
+    outline: 8px solid #ececec;
+    border-radius: 3px;
+}
+
+.library-icon-bl-open:hover {
+    background-color: #ececec;
+    outline: 8px solid #ececec;
+    border-radius: 3px;
+}
+
+.cards-icon-bl:hover {
+    background-color: #ececec;
+    outline: 8px solid #ececec;
+    border-radius: 3px;
+}
+
+.home-icon-open {
+    width: 23px;
+    height: 23px;
+}
+
+.library-icon-open {
+    width: 23px;
+    height: 23px;
+}
+
+.cards-icon-open {
+    width: 23px;
+    height: 23px;
+}
+
+.header.open .icons-src-open {
+    transition: transform 0.1s ease 0s;
+    transform: translateX(238px);
+}
+
+.burger-menu-img {
+    width: 21.1px;
+    height: 21.1px;
+    margin-bottom: 2.9px;
+    
+}
+
+.search-bl {
+    margin-left: 33%;
+    display: flex;
+    align-items: center;
+    gap: 1px;
+}
+
+.search-input {
+    width: 350px;
+}
+
+.account-bl {
+    margin-left: auto;
+    margin-right: 15px;
+}
+
+.user-btn {
+    background-color: white;
+    border: 0;
+    border-radius: 50%;
+    width: 41px;
+    height: 41px;
+}
+
+.user-icon {
+    width: 40px; 
+    height: 40px;
+}
+
+.login-url {
+    background-color: #c5bfe9;
+    border: 0.5px solid black;
+    text-decoration: none;
+}
+
+.dr-menu {
+    width: 273.867px;
+    height: 423px;
+}
+
+.dr-menu-bl-1 {
+    width: 273.867px;
+    height: 76;
+    margin-top: 3px;
+}
+
+.user-icon-open {
+    width: 64px; 
+    height: 64px;
+}
+
+.username-mail-dr-open {
+    margin-top: 5px;
+}
+
+.username-dr-open {
+    margin-bottom: -50;
+}
+
+.separator {
+    height: 1px; /* Толщина полосы */
+    background-color: rgb(131, 119, 119, 0.3); /* Цвет полосы */
+    margin: 10px 0; /* Отступы сверху и снизу */
+}
+
+.dr-menu-open-btns {
+    display: flex;
+    
+    
+    flex-direction: column;
+}
+
+.login-dr-menu-open {
+    background-color: #c5bfe9;
+    border: 0.5px solid black;
+}
+
+.invite-dr-menu-open {
+    background-color: #c5bfe9;
+    border: 0.5px solid black;
+}
+
+.modal-dr-menu-open {
+    background-color: #c5bfe9;
+    border: 0.5px solid black;
+}
+
+.modal_register {
+    width: 482px;
+    padding-top: 100px;
+}
+
+.form {
+    margin-left: 110px;
+}
+  
+.content {
+    padding: 70px 450px;
+}
+
+.recent-cards-h6 {
+    padding-bottom: 30px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .item {
+    padding: 20px;
+    text-align: center;
+  }
+  
+.recent-cards-url {
+    display: flex;
+    width: 500px;
+    border: none;
+    text-decoration: none;
+    color: rgb(235, 171, 88);
+    padding: 4px 17px;
+    border-radius: 10px;
+}
+
+.recent-cards-url:hover {
+    background-color: #ececec;
+    outline: 15px solid #ececec;
+}
+
+.recent-cards-img-bl {
+    padding: 8px 8px;
+    background-color: #c5bfe9;
+    border-radius: 10px;
+}
+
+.recent-cards-bl {
+    padding-left: 18px;
+}
+
+.recent-cards-text-1 {
+    display: flex;
+    align-items: start;
+    font-weight: 600;
+    color: #282e3e;
+}
+
+.recent-cards-text-2 {
+    display: flex;
+    align-items: start;
+    color: #586380;
+}

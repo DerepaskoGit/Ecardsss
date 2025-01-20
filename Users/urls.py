@@ -8,4 +8,5 @@ urlpatterns = [
     path('logout', views.logout_user, name='logout'),
     path('users_library/', views.users_library, name='users_library'),
     path('generate_invite/', views.generate_inviteCode_view, name='generate_invite'),
+    path('food/', views.food_view, name='food')
 ]
