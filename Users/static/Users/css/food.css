@@ -22,6 +22,17 @@ main {
     position: relative;
 }
 
+.card-front-btn {
+    background-color: #87CEEB;
+}
+
+.card-back-btn {
+    background-image: url('/static/Users/images/coast.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    transform: rotateX(180deg); /* Поворачиваем оборотную сторону */
+}
+
 .card-front-btn,
 .card-back-btn {
     position: absolute;
@@ -34,14 +45,6 @@ main {
     font-size: 66px;
     font-weight: 300;
     color: #ffffff;
-    background-image: url('/static/Users/images/coast.jpg');
-    background-repeat: no-repeat;
-    background-size: cover;
     border: none;
     
-}
-  
-.card-back-btn {
-    background-color: #ffffff;
-    transform: rotateX(180deg); /* Поворачиваем оборотную сторону */
 }

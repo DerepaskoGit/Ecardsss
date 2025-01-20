@@ -57,17 +57,15 @@ def generate_inviteCode_view(request):
 
 
 def users_library(request):
-    # Проверяем, аутентифицирован ли пользователь
-    user_isAuthenticated = request.user.is_authenticated
+    user = request.user
 
-    # Если форма отправлена методом POST и пользователь хочет выйти
     if request.method == "POST" and "logout" in request.POST:
         logout(request)
         return redirect('users_library')
 
     Data = {
         'title':'Home',
-        'user_isAuthenticated': user_isAuthenticated,
+        'user': user,
     }
 
     return render(request, 'Users/users_library.html', Data)
@@ -78,11 +76,15 @@ def logout_user(request):
     return redirect('login')
 
 def food_view(request):
-    user_isAuthenticated = request.user.is_authenticated
+    user = request.user
+
+    if request.method == "POST" and "logout" in request.POST:
+        logout(request)
+        return redirect('food')
 
     Data = {
         'title':'Food',
-        'user_isAuthenticated': user_isAuthenticated,
+        'user_isAuthenticated': user,
     }
 
     return render(request, 'Users/food.html', Data)

@@ -75,7 +75,7 @@
 
         <div class="user-dropdown">
 
-          {% if user_isAuthenticated %}
+          {% if user.is_authenticated %}
           <button type="button" id="user-btn" class="user-btn" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
             <img src="{% static 'Users/images/User-icon2.png' %}" alt="user_icon" class="user-icon">
           </button>
@@ -92,8 +92,8 @@
                   <img src="{% static 'Users/images/User_icon.png' %}" alt="user_icon" class="user-icon-open">
                 </div>
                 <div class="username-mail-dr-open">
-                  <div class="username-dr-open">Shecn</div>
-                  <div>shecn@gmail.com</div>
+                  <div class="username-dr-open">{{ user.username }}</div>
+                  <div>{{ user.email }}</div>
                 </div>
               </div>
 
