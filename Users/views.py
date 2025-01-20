@@ -78,9 +78,11 @@ def logout_user(request):
     return redirect('login')
 
 def food_view(request):
+    user_isAuthenticated = request.user.is_authenticated
 
     Data = {
-        'title':'Food'
+        'title':'Food',
+        'user_isAuthenticated': user_isAuthenticated,
     }
 
     return render(request, 'Users/food.html', Data)

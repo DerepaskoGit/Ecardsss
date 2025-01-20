@@ -31,12 +31,14 @@ main {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 96px;
-    font-weight: 700;
-    color: #0063d7;
-    background-color: #ffffff;
-    border: 15px solid #f3f3f3;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    font-size: 66px;
+    font-weight: 300;
+    color: #ffffff;
+    background-image: url('/static/Users/images/coast.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    border: none;
+    
 }
   
 .card-back-btn {
