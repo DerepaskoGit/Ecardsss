@@ -59,3 +59,15 @@ document.getElementById('generateInviteBtn').onclick = function() {
     });
   };
 
+const card = document.querySelector('.card');
+let isFlipped = false;
+let rotation = 0;
+
+card.addEventListener('click', () => {
+  rotation += 180; // Увеличиваем угол поворота на 180 градусов
+  card.style.transform = `rotateX(${rotation}deg)`;
+  isFlipped = !isFlipped;
+});
+  
+  
+  

@@ -246,16 +246,6 @@ body {
     border: 0.5px solid black;
 }
 
-.modal-dr-menu-open {
-    background-color: #c5bfe9;
-    border: 0.5px solid black;
-}
-
-.modal_register {
-    width: 482px;
-    padding-top: 100px;
-}
-
 .form {
     margin-left: 110px;
 }
