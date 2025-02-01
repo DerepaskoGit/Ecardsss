@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import get_user_model, authenticate
-from .models import InviteCodeDb
+from Card.models import InviteCodeDb
 
 class UserLibraryForm(forms.Form):
     name = forms.CharField(widget=forms.TextInput(attrs={'maxlength':'4', 'name': 'emaiwwwl'}))
@@ -50,7 +50,7 @@ class RegisterForm(forms.ModelForm):
         widget=forms.TextInput(attrs={
             'class': 'form-control',
             'placeholder': "Введите имя пользователя",
-            'id': 'username',
+            'id': 'id_username',  # Изменено
             'maxlength':'8',
     }))
 

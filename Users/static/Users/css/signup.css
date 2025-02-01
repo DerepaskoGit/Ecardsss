@@ -14,3 +14,9 @@
   margin-top: -65px;
   margin-left: 17px;
 }
+
+.username-status {
+  position: absolute;
+  left: 260px;
+  top: 130px;
+}

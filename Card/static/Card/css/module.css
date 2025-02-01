@@ -1,0 +1,137 @@
+body {
+    background-color: #f6f7fb;
+}
+
+.top-buttons {
+    display: flex;
+    margin-bottom: 30px;
+}
+
+.top-buttons-bl-2 {
+    margin-left: auto;
+}
+
+
+.title-module {
+    background-color: white;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.title-module-bl-1 {
+    font-size: 14px;
+    font-weight: 500;
+    color: #586380;
+}
+
+.title-module-bl-2 {
+    font-size: 17px;
+}
+
+.title-input {
+    border: none;
+    margin-left: -3px;
+}
+
+.description-module {
+    background-color: white;
+    margin-top: 30px;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.description-input {
+    border: none;
+}
+
+.card-editing {
+    margin-top: 90px;
+    background-color: white;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.card-editing-bl-1 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 7px;
+    margin-left: 7px;
+}
+
+/* .voice-card {
+    margin-left: 390px;
+} */
+
+.card-delete-btn {
+    border: none;
+    background-color: white;
+}
+
+.card-basked-icon {
+    width: 24px;
+    height: 24px;
+}
+
+.separator {
+    width: 980px;
+    margin-left: -10px;
+    padding-bottom: 2px;
+    background-color: #f6f7fb;
+}
+
+.card-editing-bl-2 {
+    display: flex;
+    align-items: center;
+    margin-top: 43px;
+    margin-left: 7px;
+}
+
+.card-term-input {
+    border: none;
+}
+
+.card-term .separator {
+    width: auto;
+    padding-bottom: 2px;
+    height: 1px; /* Толщина полосы */
+    background-color: #2e3856; /* Цвет полосы */
+    margin: 10px 0; /* Отступы сверху и снизу */
+}
+
+.card-definition {
+    margin-left: 390px;
+}
+
+.card-definition-input {
+    border: none;
+}
+
+.card-definition .separator {
+    width: auto;
+    padding-bottom: 2px;
+    height: 1px; /* Толщина полосы */
+    background-color: #2e3856; /* Цвет полосы */
+    margin: 10px 0; /* Отступы сверху и снизу */
+}
+
+.add-card{
+    position: relative;
+    padding-top: 150px;
+}
+
+.add-card-btn {
+    top: 65px;
+    left: 40%;
+    position: absolute;
+    border: none;
+    background-color: white;
+    font-size: 20px;
+    font-weight: 400;
+
+    transition: color 0.1s linear;
+}
+
+.add-card-btn:hover {
+    color: #7d66ff;
+}

@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'Card/css/library.css' %}">
+
+<main class="content">
+    <div class="one-container">
+
+        <div class="modules">
+            <div class="your-library-bl">
+                <h2>Ваша библиотека</h2>
+            </div>
+            <div class="main-content-bl">
+                <div>
+                    <h5>Модули</h5>
+                </div>
+
+                {% for module in modules %}
+                <div class="module-items">
+                    <div class="item ">
+                        <a href="{{ module.get_absolute_url }}" class="recent-cards-url">
+                        <div class="recent-cards-img-bl">
+                            <img src="{% static 'Card/images/cards.png' %}" alt="" class="cards-icon-open">
+                        </div>
+                        <div class="recent-cards-bl">
+                            <div class="recent-cards-text-1">
+                            {{ module }}
+                            </div>
+                            <div class="recent-cards-text-2">
+                            Модуль  •  20 terms  •  Автор: marinapogorelova
+                            </div>
+                        </div>
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+
+            </div>
+        </div>
+
+    </div>
+</main>
+{% endblock %}

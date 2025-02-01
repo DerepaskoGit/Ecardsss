@@ -1,0 +1,194 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'Card/css/module.css' %}">
+
+<main class="content">
+    <div class="one-container">
+        <!-- Изменили action на правильный URL для обработки добавления карточек -->
+        <form id="module-form" action="{% url 'module' module_slug=module_slug %}" method="POST" class="main-form">
+            {% csrf_token %}
+            {{ formset.management_form }}
+
+            <div class="top-buttons">
+                <div class="top-buttons-bl-1">
+                    <a href="{% url 'user_library' user=user.username %}" class="btn login-url">Назад</a>
+                </div>
+                <div class="top-buttons-bl-2">
+                    <button type="submit" name="delete-this-module" class="btn login-url">Удалить модуль</button>
+                </div>
+                <div class="top-buttons-bl-2">
+                    <button type="submit" class="btn login-url" id="submit-btn">Готово</button>
+                </div>
+            </div>
+
+            <div class="title-module">
+                <div class="title-module-bl-1">Название</div>
+                <div class="title-module-bl-2">
+                    {{ form_module.title }}
+                    {% if form_module.errors %}
+                        <ul class="errors">
+                            {% for error in form_module.errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="description-module">
+                <div class="title-module-bl-1">
+                    {{ form_module.description }}
+                    {% if form_module.description.errors %}
+                        <ul class="errors">
+                            {% for error in form_module.description.errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div id="formset-container">
+                {% for flashcard in formset %}
+                <div class="card-editing" id="card-{{ flashcard.instance.id }}">
+                    <input type="hidden" name="{{ flashcard.prefix }}-id" value="{{ flashcard.instance.id }}">
+                    <input type="checkbox" name="{{ flashcard.prefix }}-DELETE" style="display: none;">
+                    <div class="card-editing-bl-1">
+                        <p>{{ forloop.counter }}</p>
+                        <p class="voice-card">Вставить звук</p>
+                        <button type="button" class="card-delete-btn" name="delete-flashcard" onclick="deleteCard(event)">
+                            <img src="{% static 'Card/images/wastebasket.png' %}" alt="" class="card-basked-icon">
+                        </button>
+                    </div>
+                    <div class="separator"></div>
+                    <div class="card-editing-bl-2">
+                        <div class="card-term">
+                            {{ flashcard.word_front }}
+                            <div class="separator"></div>
+                            <p>Термин</p>
+                        </div>
+                        <div class="card-definition">
+                            {{ flashcard.word_back }}
+                            <div class="separator"></div>
+                            <p>Определение</p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Шаблонная карточка (скрытая) -->
+            <div id="empty-form" style="display: none;">
+                <div class="card-editing">
+                    <input type="hidden" name="{{ formset.prefix }}-__prefix__-id">
+                  
+                    <div class="card-editing-bl-1">
+                        <p class="card-number">{{ forloop.counter }}</p>
+                        <p class="voice-card">Вставить звук</p>
+                        <button class="card-delete-btn" type="button" onclick="deleteCard(event)">
+                            <img src="{% static 'Card/images/wastebasket.png' %}" alt="" class="card-basked-icon">
+                        </button>
+                    </div>
+                    <div class="separator"></div>
+                    <div class="card-editing-bl-2">
+                        <div class="card-term">
+                            {{ formset.empty_form.word_front }}
+                            <div class="separator"></div>
+                            <p>Термин</p>
+                        </div>
+                        <div class="card-definition">
+                            {{ formset.empty_form.word_back }}
+                            <div class="separator"></div>
+                            <p>Определение</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-editing add-card">
+                <button type="button" id="add-card-btn" class="add-card-btn">Добавить карточку</button>
+            </div>
+        </form>
+
+        <!-- Блок ошибок для карточек -->
+        <div id="error-messages" style="display: none;" class="error-messages">
+            <ul id="error-list"></ul>
+        </div>
+    </div>
+</main>
+
+<script>
+const managementForm = document.querySelector('[name="{{ formset.prefix }}-TOTAL_FORMS"]');
+const addCardBtn = document.getElementById('add-card-btn');
+const formsetContainer = document.getElementById('formset-container');
+const errorMessages = document.getElementById('error-messages');
+const errorList = document.getElementById('error-list');
+const form = document.getElementById('module-form');
+const submitBtn = document.getElementById('submit-btn');
+
+function updateCardNumbers() {
+    let cards = document.querySelectorAll('.card-editing');
+    cards.forEach((card, index) => {
+        card.querySelector('.card-number').textContent = index + 1; // Обновляем номер карточки
+    });
+}
+
+addCardBtn.addEventListener('click', function() {
+    const currentIndex = document.querySelectorAll('.card-editing').length;
+    if (currentIndex >= 10) {
+        alert('Максимальное количество карточек достигнуто!');
+        return;
+    }
+
+    const emptyForm = document.getElementById('empty-form').innerHTML;
+    const formIndex = parseInt(managementForm.value);
+    let newFormHtml = emptyForm.replace(/__prefix__/g, formIndex);
+    let newForm = document.createElement('div');
+    newForm.innerHTML = newFormHtml;
+    newForm.querySelector('.card-number').textContent = currentIndex + 1;
+    formsetContainer.appendChild(newForm);
+
+    managementForm.value = formIndex + 1; // Увеличиваем количество форм
+    updateCardNumbers();  // Пересчитываем номера карточек
+});
+
+function deleteCard(event) {
+    event.preventDefault();
+    let cardElement = event.target.closest(".card-editing");
+    if (!cardElement) return;
+
+    let deleteInput = cardElement.querySelector('input[name$="-DELETE"]');
+    if (deleteInput) {
+        deleteInput.checked = true; // Помечаем карточку для удаления
+    }
+
+    cardElement.style.display = "none"; // Скрываем карточку на странице
+    updateCardNumbers();  // Пересчитываем номера карточек
+    updateManagementForm(); // Обновляем количество форм
+}
+
+function updateManagementForm() {
+    const totalForms = document.querySelector('[name="{{ formset.prefix }}-TOTAL_FORMS"]');
+    const cards = document.querySelectorAll('.card-editing');
+    totalForms.value = cards.length; // Обновляем количество форм
+}
+
+form.addEventListener('submit', function(event) {
+    // В случае ошибок не отправлять форму, а показать сообщения об ошибках
+    const invalidFields = form.querySelectorAll(':invalid');
+    if (invalidFields.length > 0) {
+        errorMessages.style.display = 'block';
+        errorList.innerHTML = '';
+        invalidFields.forEach(field => {
+            const errorMessage = document.createElement('li');
+            errorMessage.textContent = field.validationMessage;
+            errorList.appendChild(errorMessage);
+        });
+        event.preventDefault();  // Не отправлять форму, пока не исправим ошибки
+    }
+});
+
+</script>
+
+{% endblock %}

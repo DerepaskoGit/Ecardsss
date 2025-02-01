@@ -2,12 +2,8 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from .models import InviteCodeDb
 from .forms import RegisterForm, LoginForm, UserLibraryForm
-from .utils import generate_inviteCode
 
-def index(request):
-    return redirect('users_library')
 
 def signup_view(request):
     if request.method == 'POST':
@@ -36,7 +32,7 @@ def login_view(request):
             user = authenticate(request, username=cd['username'], password=cd['password'])
             if user and user.is_active:
                 login(request, user)
-                return redirect('users_library')
+                return redirect('main')
             else:
                 form.add_error(None, 'Логин или пароль не совпадают')
     else:
@@ -49,42 +45,14 @@ def login_view(request):
     return render(request, 'Users/login.html', Data)
 
 
-def generate_inviteCode_view(request):
-    if request.method == 'POST':
-        invite = generate_inviteCode(request.user)
-        return JsonResponse({'invite_code':invite.invite_code})
-    return JsonResponse({'error': 'Invalid request'}, status=400)
-
-
-def users_library(request):
-    user = request.user
-
-    if request.method == "POST" and "logout" in request.POST:
-        logout(request)
-        return redirect('users_library')
-
-    Data = {
-        'title':'Home',
-        'user': user,
+def check_username(request):
+    username = request.GET.get('username', None)
+    response = {
+        'is_taken': User.objects.filter(username=username).exists()
     }
-
-    return render(request, 'Users/users_library.html', Data)
+    return JsonResponse(response)
 
 
 def logout_user(request):
     logout(request)
     return redirect('login')
-
-def food_view(request):
-    user = request.user
-
-    if request.method == "POST" and "logout" in request.POST:
-        logout(request)
-        return redirect('food')
-
-    Data = {
-        'title':'Food',
-        'user_isAuthenticated': user,
-    }
-
-    return render(request, 'Users/food.html', Data)

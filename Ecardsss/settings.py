@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_extensions',
-    'OneApp.apps.OneappConfig',
+    'Card.apps.CardConfig',
     'Users.apps.UsersConfig',
 ]
 
