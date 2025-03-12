@@ -3,12 +3,13 @@ from django.http import HttpResponse, JsonResponse
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from django.forms import inlineformset_factory
+from django.forms import inlineformset_factory, formset_factory
 import json
 from django.template.loader import render_to_string
-from .models import Module, Flashcard
+from .models import Module
 from .utils import generate_inviteCode
-from .forms import ModuleEditingForm, CardEditingForm
+from .forms import ModuleEditingForm, get_dynamic_form_class
+from django.db import connection
 
 def index(request):
     user = request.user
@@ -66,65 +67,90 @@ def user_library_view(request, user):
 
 
 def modul_view(request, module_slug=None):
-    # Получаем модуль по slug, если он передан, иначе создаем новый
     module = get_object_or_404(Module, slug=module_slug) if module_slug else None
+    
+    form_module = ModuleEditingForm(instance=module)
+    table_name = f'Module_{module_slug}'
 
-    # Создаем inline formset для карточек
-    CardFormSet = inlineformset_factory(
-        Module,
-        Flashcard,
-        form=CardEditingForm,
-        extra=0,  # Мы добавляем одну пустую форму для добавления новой карточки
-        can_delete=True
-    )
-
-    # Формы для модуля
-    form_module = ModuleEditingForm(instance=module) if module else ModuleEditingForm()
-    formset = CardFormSet(request.POST or None, instance=module) if module else CardFormSet()
+    form_module = ModuleEditingForm(request.POST, instance=module)
+    DynamicForm = get_dynamic_form_class(table_name) 
+    DynamicFormSet  = formset_factory(DynamicForm, extra=0)
 
     if request.method == "POST":
-        # Проверка на выход из аккаунта
         if "logout" in request.POST:
             logout(request)
             return redirect('main')
 
-        # Удаление модуля, если выбрано
         if "delete-this-module" in request.POST and module:
             module.delete()
             return redirect('user_library', user=request.user.username)
 
-        # Обработка формы модуля и карточек
-        form_module = ModuleEditingForm(request.POST, instance=module)
-        formset = CardFormSet(request.POST, instance=module)
+        formset = DynamicFormSet(request.POST, request.FILES, form_kwargs={'table_name': table_name})
 
         if form_module.is_valid() and formset.is_valid():
-            # Сохраняем изменения в модуле
             module = form_module.save(commit=False)
+            
+            for form in formset:
+                form.save()
+            
+            print("VALID FORMSET 123123123")
+
             if module_slug is None:
                 module.save()
                 module.user.set([request.user])
 
-            # Привязываем карточки к модулю и сохраняем их
-            formset.instance = module
-            formset.save()  # Сохраняем карточки, включая новые и удаленные
-
             # Возвращаем JSON-ответ для успешного выполнения
             JsonResponse({"success": True})
             return redirect('user_library', user=request.user.username)
-
         else:
-            # Если есть ошибки валидации, выводим их
-            errors = {}
+            errors_form_module = {}
             for error_list in form_module.errors.values():
                 for error in error_list:
-                    errors["module"] = error
-            for error_list in formset.errors:
-                for error in error_list.values():
-                    errors["flashcard"] = error
+                    errors_form_module["module"] = error
+            JsonResponse({"success": False, "errors": errors_form_module}, status=400)
 
-            return JsonResponse({"success": False, "errors": errors}, status=400)
+            errors_formset = {}
+            for form_error in formset.errors:
+                if isinstance(form_error, dict):
+                    for field, error in form_error.items():
+                        errors_formset[field] = error
+            return JsonResponse({"success": False, "errors": errors_formset}, status=400)
 
-    # Подготовка данных для рендеринга
+    else:
+        form_module = ModuleEditingForm(instance=module) if module else ModuleEditingForm()
+        
+        # Пример получения начальных данных из БД
+        initial_data = []
+        with connection.cursor() as cursor:
+            cursor.execute(
+                f"""
+                SELECT type_card, word_front, word_back, phrase_front, phrase_back, image, 
+                    audio_word_front, audio_word_back, audio_phrase_front, audio_phrase_back
+                FROM {table_name}
+                """
+            )
+            rows = cursor.fetchall()
+            for row in rows:
+                initial_data.append({
+                    'type_card': row[0],
+                    'word_front': row[1],
+                    'word_back': row[2],
+                    'phrase_front': row[3],
+                    'phrase_back': row[4],
+                    'image': row[5],
+                    'audio_word_front': row[6],
+                    'audio_word_back': row[7],
+                    'audio_phrase_front': row[8],
+                    'audio_phrase_back': row[9],
+                })
+
+        # Создаем FormSet, передавая initial_data и form_kwargs для передачи table_name
+        formset = DynamicFormSet(
+            initial=initial_data,
+            form_kwargs={'table_name': table_name}
+        )
+
+
     data = {
         'this_page': 'module',
         'user': request.user,
@@ -145,8 +171,8 @@ def delete_flashcard_view(request):
             if form.endswith("-DELETE") and request.POST[form] == "on":
                 # Получаем ID карточки из поля "id"
                 flashcard_id = form.replace("-DELETE", "-id")
-                flashcard = get_object_or_404(Flashcard, id=request.POST[flashcard_id])
-                flashcard.delete()
+                # flashcard = get_object_or_404(Flashcard, id=request.POST[flashcard_id])
+                # flashcard.delete()
 
         # После удаления перенаправляем на тот же маршрут или на другой
         return redirect('user_library', user=request.user.username)  # Замените на имя вашего представления, куда нужно перенаправить

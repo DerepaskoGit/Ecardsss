@@ -6,7 +6,7 @@
 <main class="content">
     <div class="one-container">
         <!-- Изменили action на правильный URL для обработки добавления карточек -->
-        <form id="module-form" action="{% url 'module' module_slug=module_slug %}" method="POST" class="main-form">
+        <form id="module-form" action="" method="POST" class="main-form">
             {% csrf_token %}
             {{ formset.management_form }}
 
@@ -21,7 +21,7 @@
                     <button type="submit" class="btn login-url" id="submit-btn">Готово</button>
                 </div>
             </div>
-
+            
             <div class="title-module">
                 <div class="title-module-bl-1">Название</div>
                 <div class="title-module-bl-2">
@@ -48,15 +48,21 @@
                     {% endif %}
                 </div>
             </div>
-
+            
             <div id="formset-container">
                 {% for flashcard in formset %}
-                <div class="card-editing" id="card-{{ flashcard.instance.id }}">
+                <div class="card-editing" id="card-{% if flashcard.instance and flashcard.instance.id %}{{ flashcard.instance.id }}{% else %}new-{{ forloop.counter }}{% endif %}">
                     <input type="hidden" name="{{ flashcard.prefix }}-id" value="{{ flashcard.instance.id }}">
                     <input type="checkbox" name="{{ flashcard.prefix }}-DELETE" style="display: none;">
                     <div class="card-editing-bl-1">
                         <p>{{ forloop.counter }}</p>
                         <p class="voice-card">Вставить звук</p>
+                        <label for="id_{{ formset.prefix }}-__prefix__-type_card">Тип карточки:</label>
+                        <select name="{{ flashcard.prefix }}-type_card" id="id_{{ flashcard.prefix }}-type_card">
+                            <option value="simple" {% if flashcard.initial.type_card == 'simple' %}selected{% endif %}>Simple</option>
+                            <option value="phrase" {% if flashcard.initial.type_card == 'phrase' %}selected{% endif %}>Phrase</option>
+                            <option value="test" {% if flashcard.initial.type_card == 'test' %}selected{% endif %}>Test</option>
+                        </select>                        
                         <button type="button" class="card-delete-btn" name="delete-flashcard" onclick="deleteCard(event)">
                             <img src="{% static 'Card/images/wastebasket.png' %}" alt="" class="card-basked-icon">
                         </button>
@@ -80,12 +86,18 @@
 
             <!-- Шаблонная карточка (скрытая) -->
             <div id="empty-form" style="display: none;">
-                <div class="card-editing">
+                <div class="card-editing" id="card-{% if flashcard.instance and flashcard.instance.id %}{{ flashcard.instance.id }}{% else %}new-{{ forloop.counter }}{% endif %}">
                     <input type="hidden" name="{{ formset.prefix }}-__prefix__-id">
                   
                     <div class="card-editing-bl-1">
                         <p class="card-number">{{ forloop.counter }}</p>
                         <p class="voice-card">Вставить звук</p>
+                        <label for="id_{{ formset.prefix }}-__prefix__-type_card">Тип карточки:</label>
+                        <select name="{{ flashcard.prefix }}-type_card" id="id_{{ flashcard.prefix }}-type_card">
+                            <option value="simple" {% if flashcard.initial.type_card == 'simple' %}selected{% endif %}>Simple</option>
+                            <option value="phrase" {% if flashcard.initial.type_card == 'phrase' %}selected{% endif %}>Phrase</option>
+                            <option value="test" {% if flashcard.initial.type_card == 'test' %}selected{% endif %}>Test</option>
+                        </select>    
                         <button class="card-delete-btn" type="button" onclick="deleteCard(event)">
                             <img src="{% static 'Card/images/wastebasket.png' %}" alt="" class="card-basked-icon">
                         </button>
@@ -105,10 +117,12 @@
                     </div>
                 </div>
             </div>
-
+            
+            {% if module_slug %}
             <div class="card-editing add-card">
                 <button type="button" id="add-card-btn" class="add-card-btn">Добавить карточку</button>
             </div>
+            {% endif %}
         </form>
 
         <!-- Блок ошибок для карточек -->
@@ -162,8 +176,9 @@ function deleteCard(event) {
     if (deleteInput) {
         deleteInput.checked = true; // Помечаем карточку для удаления
     }
-
-    cardElement.style.display = "none"; // Скрываем карточку на странице
+    
+    // cardElement.style.display = "none"; // Скрываем карточку на странице
+    cardElement.remove();
     updateCardNumbers();  // Пересчитываем номера карточек
     updateManagementForm(); // Обновляем количество форм
 }

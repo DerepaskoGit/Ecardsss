@@ -9,6 +9,5 @@ urlpatterns = [
     path('module/add/', views.modul_view, name='module_add'),
     path('module/<slug:module_slug>', views.modul_view, name='module'),
     path("delete-flashcard/", views.delete_flashcard_view, name="delete_flashcard"),
-
 ]
 
